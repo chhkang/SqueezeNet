@@ -13,7 +13,7 @@ class FireBlock(nn.Module):
         out = F.relu(self.conv1x1_1(x))
         out_1 = self.conv1x1_2(out)
         out_2 = self.conv3x3(out)
-        out = F.relu(torch.cat((out_1,out_2),1))
+        out = F.relu(torch.cat([out_1,out_2],1))
         return out
 
 class SqueezeNet(nn.Module):
@@ -25,6 +25,18 @@ class SqueezeNet(nn.Module):
         self.Fire9 = self._make_layer(512,[64,256,256])
         self.conv2 = nn.Conv2d(512,100,kernel_size=1,stride=1)
         self.dropout = nn.Dropout(p=0.5)
+        # weight initialization
+        for m in self.modules():
+            if isinstance(m, nn.Conv2d) or isinstance(m, nn.Linear):
+                import scipy.stats as stats
+                X = stats.truncnorm(-2, 2, scale=0.01)
+                values = torch.as_tensor(X.rvs(m.weight.numel()), dtype=m.weight.dtype)
+                values = values.view(m.weight.size())
+                with torch.no_grad():
+                    m.weight.copy_(values)
+            elif isinstance(m, nn.BatchNorm2d):
+                nn.init.constant_(m.weight, 1)
+                nn.init.constant_(m.bias, 0)
 
     def _make_layer(self,n_in,params):
         layers = []
