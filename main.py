@@ -8,6 +8,7 @@ import torch.optim as optim
 import torch.backends.cudnn as cudnn
 
 #from model import DenseNet
+from model import SqueezeNet
 from utils import *
 from config import config
 from data import DataLoader
@@ -26,6 +27,7 @@ def main():
     print('\n=> Build SqueezeNet..')
     #growthRate,depth,reduction,nClasses)
     #model = DenseNet(24,100,0.2,100)
+    model = SqueezeNet()
     print(model)
     print('==> Complete build')
 

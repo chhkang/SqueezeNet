@@ -101,9 +101,9 @@ class ProgressMeter(object):
 def adjust_learning_rate(optimizer, epoch, lr):
     """Sets the learning rate, decayed rate of 0.04 every 8 epoches"""
     if epoch <=30:
-      lr = 0.1
+      lr = 0.04
     elif epoch <=60:
-      lr = 0.01
+      lr = 0.004
     else:
       lr = 0.001
 
