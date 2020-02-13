@@ -12,7 +12,6 @@ from model import SqueezeNet
 from utils import *
 from config import config
 from data import DataLoader
-from matplotlib import pyplot as plt
 
 best_acc1 = 0
 
