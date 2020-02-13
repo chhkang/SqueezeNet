@@ -11,8 +11,9 @@ class FireBlock(nn.Module):
 
     def forward(self,x):
         out = F.relu(self.conv1x1_1(x))
-        out = self.conv1x1_2(out)
-        out = F.relu(self.conv3x3(out))
+        out_1 = self.conv1x1_2(out)
+        out_2 = self.conv3x3(out)
+        out = F.relu(torch.cat(out_1,out_2))
         return out
 
 class SqueezeNet(nn.Module):
