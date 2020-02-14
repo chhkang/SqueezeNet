@@ -5,15 +5,15 @@ import torch.nn.functional as F
 class FireBlock(nn.Module):
     def __init__(self,n_in,f1x1,e1x1,e3x3):
         super(FireBlock,self).__init__()
-        self.conv1x1_1 = nn.Conv2d(n_in,f1x1, kernel_size=1, bias=False)
-        self.conv1x1_2 = nn.Conv2d(f1x1,e1x1,kernel_size=1,bias=False)
-        self.conv3x3 = nn.Conv2d(f1x1,e3x3,kernel_size=3,padding=1,bias=False)
+        self.conv1x1_1 = nn.Conv2d(n_in,f1x1, kernel_size=1)
+        self.conv1x1_2 = nn.Conv2d(f1x1,e1x1,kernel_size=1)
+        self.conv3x3 = nn.Conv2d(f1x1,e3x3,kernel_size=3,padding=1)
 
     def forward(self,x):
         out = F.relu(self.conv1x1_1(x))
         out_1 = self.conv1x1_2(out)
         out_2 = self.conv3x3(out)
-        out = F.relu(torch.cat([out_1,out_2],1))
+        out = F.relu(torch.cat([out_1, out_2], 1))
         return out
 
 class SqueezeNet(nn.Module):
@@ -48,12 +48,10 @@ class SqueezeNet(nn.Module):
     def forward(self,x):
         out = self.conv1(x)
         out = self.Fire1(out)
-        out = F.max_pool2d(out, 3, stride=2,padding=1)
+        out = F.max_pool2d(out, 3, stride=2, padding=1)
         out = self.Fire2(out)
-        #print(out.size())
         out = F.max_pool2d(out, 3, stride=2, padding=1)
         out = self.dropout(self.Fire9(out))
-        #print(out.size())
         out = self.conv2(out)
         out = F.avg_pool2d(out, 8)
         out = out.view(out.size(0), -1)
