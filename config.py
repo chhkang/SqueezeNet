@@ -12,7 +12,7 @@ def config():
                              'using Data Parallel')
     parser.add_argument('--epochs', default=100, type=int, metavar='N',
                         help='number of total epochs to run (default: 200)')
-    parser.add_argument('--lr', '--learning-rate', default=0.04, type=float,
+    parser.add_argument('--lr', '--learning-rate', default=0.05, type=float,
                         metavar='LR', help='initial learning rate (defualt: 0.1)',
                         dest='lr')
     parser.add_argument('--momentum', default=0.9, type=float, metavar='M',

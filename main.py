@@ -11,6 +11,7 @@ from model import SqueezeNet
 from utils import *
 from config import config
 from data import DataLoader
+from matplotlib import pyplot as plt
 
 best_acc1 = 0
 
@@ -25,6 +26,15 @@ def main():
     print('\n=> Build SqueezeNet..')
     model = SqueezeNet()
     print(model)
+
+    from thop import profile
+    input = torch.randn(1, 3, 32, 32)
+    flops, params = profile(model, inputs=(input,))
+    from thop import clever_format
+    macs, params = clever_format([flops, params], "%.3f")
+    print("MACS: {}".format(macs))
+    print("Params: {}".format(params))
+
     print('==> Complete build')
 
     criterion = nn.CrossEntropyLoss()
