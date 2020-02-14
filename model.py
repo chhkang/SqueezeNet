@@ -9,11 +9,13 @@ class FireBlock(nn.Module):
         self.conv1x1_1 = nn.Conv2d(n_in, f1x1, kernel_size=1)
         self.conv1x1_2 = nn.Conv2d(f1x1, e1x1, kernel_size=1)
         self.conv3x3 = nn.Conv2d(f1x1, e3x3, kernel_size=3, padding=1)
-
+        self.bn1 = nn.BatchNorm2d(f1x1)
+        self.bn2 = nn.BatchNorm2d(e1x1)
+        self.bn3 = nn.BatchNorm2d(e3x3)
     def forward(self, x):
-        out = F.relu(self.conv1x1_1(x))
-        out_1 = self.conv1x1_2(out)
-        out_2 = self.conv3x3(out)
+        out = self.bn1(F.relu(self.conv1x1_1(x)))
+        out_1 = self.bn2(self.conv1x1_2(out))
+        out_2 = self.bn3(self.conv3x3(out))
         out = F.relu(torch.cat([out_1, out_2], 1))
         return out
 
